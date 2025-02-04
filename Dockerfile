@@ -1,5 +1,15 @@
 FROM apache/airflow:2.7.1-python3.9
 
+
+COPY ./local_files /opt/airflow/local_files
+RUN mkdir -p /opt/airflow/local_files && \
+    if [ "$(ls -A /opt/airflow/local_files 2>/dev/null)" ]; then \
+        pip install --no-cache-dir /opt/airflow/local_files/*; \
+    else \
+        echo "No local files to install"; \
+    fi
+
+
 COPY requirements.txt /opt/airflow/
 
 USER root
